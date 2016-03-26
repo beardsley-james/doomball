@@ -1,0 +1,60 @@
+.unit-card {
+	height: 200px;
+	width: 200px;
+	background-color: green;
+	position: relative;
+	border: 4px brown solid;
+	font-size: 35px;
+	background-image: url('../images/grass.png');
+	float: left;
+	margin-right: 15px;
+	color: black;
+}
+
+.unit-name {
+	font-size: 20px;
+	width: 120px;
+	position: absolute;
+	left: 40px;
+	text-align: center
+}
+
+.unit-graphic {
+	position: absolute;
+	top: 40px
+}
+
+.stat-box {
+	height: 40px;
+	width: 40px;
+	line-height: center;
+	position: absolute;
+	text-align: center;
+}
+
+.range-box {
+	background-color: orange
+}
+
+.special-box {
+	background-color: black;
+	color: white;
+	right: 0
+}
+
+.attack-box {
+	background-color: red;
+	bottom: 0
+}
+
+.defense-box {
+	background-color: blue;
+	bottom: 0;
+	left: 80px
+}
+
+.move-box {
+	background-color: green;
+	bottom: 0;
+	right: 0
+}
