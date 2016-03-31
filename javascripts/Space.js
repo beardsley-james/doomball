@@ -1,10 +1,23 @@
-var Space = function(){
-	this.x = 0;
-	this.y = 0;
-	this.terrain = "Plains"
+var Space = function(x, y, terrain){
+	this.x = x;
+	this.y = y;
+	if (terrain) {
+		this.terrain = terrain
+	} else {this.terran = "plains"}
 }
 
-/* I'm probably going to want to structure this so that it can be used
-	in a gameboard constructing function, so the arguments are going to
-	have to be like (x, y, terrain) and then the terrain will probably be
-	a one letter thing so that I can specify maps pretty easily.
+Space.prototype.isAdjacentTo = function(space){
+	if (this.x == space.x || this.x == space.x-1 || this.x == space.x+1) {
+		if (this.x % 2 == 0) {
+			if (this.y == space.y-1 || this.y == space.y) {
+				return true
+			}
+		} else {
+			if (this.y == space.y || this.y == space.y+1) {
+				return true
+			}
+		}
+	}
+	
+	return false
+}

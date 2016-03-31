@@ -3,58 +3,84 @@
 	width: 200px;
 	background-color: green;
 	position: relative;
-	border: 4px brown solid;
+	border: 8px brown solid;
 	font-size: 35px;
-	background-image: url('../images/grass.png');
-	float: left;
-	margin-right: 15px;
+	font-family: 'Yanone Kaffeesatz', sans-serif;
 	color: black;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.unit-level2 {
+	border-color: silver;
+}
+
+.unit-level3 {
+	border-color: gold;
+}
+
+.unit-human {
+	background-image: url('../images/background-human.png');
+}
+
+.unit-orc {
+	background-image: url('../images/background-orc.png');
+}
+
+.unit-undead {
+	background-image: url('../images/background-undead.png');
+	color: white;
 }
 
 .unit-name {
-	font-size: 20px;
+	font-size: 25px;
 	width: 120px;
-	position: absolute;
+	position: relative;
 	left: 40px;
-	text-align: center
+	text-align: center;
 }
 
 .unit-graphic {
 	position: absolute;
-	top: 40px
+	top: 40px;
+	left: 0px
 }
 
 .stat-box {
+	color: black;
 	height: 40px;
 	width: 40px;
-	line-height: center;
+	line-height: 40px;
 	position: absolute;
 	text-align: center;
+	font-family: 'Carter One', serif;
 }
 
 .range-box {
-	background-color: orange
+	background-color: orange;
+	top: 0px
 }
 
 .special-box {
 	background-color: black;
 	color: white;
-	right: 0
+	right: 0px;
+	top: 0px;
 }
 
 .attack-box {
 	background-color: red;
-	bottom: 0
+	bottom: 0px
 }
 
 .defense-box {
 	background-color: blue;
-	bottom: 0;
+	bottom: 0px;
 	left: 80px
 }
 
 .move-box {
 	background-color: green;
-	bottom: 0;
-	right: 0
+	bottom: 0px;
+	right: 0px
 }

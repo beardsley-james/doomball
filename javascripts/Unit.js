@@ -17,7 +17,7 @@ var Unit = function(unit) {
 	
 	this.tokens = [];
 	
-	this.graphic = unit.graphic;
+	this.graphic = "./images/" + unit.race + "-" + unit.name + ".png";
 }
 
 var setStat = function(unit, stat) {

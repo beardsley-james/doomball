@@ -3,13 +3,11 @@ var humanUnits = {
 		"race": "human",
 		"name": "Spearmen",
 		"special": "Steadfast",
-		"graphic": "./images/spearmen.png"	
 	},
 	"archers": {
 		"race": "human",
 		"name": "Archers",
 		"special": "Pinning",
-		"graphic": "./images/archers.png",
 		"range": {
 			"value": 2
 		},
@@ -21,7 +19,6 @@ var humanUnits = {
 		"race": "human",
 		"name": "Horsemen",
 		"special": "Overrun",
-		"graphic": "./images/horsemen.png",
 		"defense": {
 			"special": true
 		},
@@ -41,7 +38,7 @@ var humanUnits = {
 		"race": "human",
 		"name": "Fusiliers",
 		"level": 2,
-		"special": "Armor Piercing",
+		"special": "Piercing",
 		"range": {
 			"value": 2
 		},
