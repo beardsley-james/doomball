@@ -26,7 +26,7 @@ function renderUnitCard(unit) {
 				outputHTML += "<span style='font-size: .5em'>*</span>"
 			}
 		outputHTML += "</div>";
-		outputHTML += "<img src='" + unit.graphic.split(" ").join("-") + "' class='unit-graphic'>";
+		outputHTML += "<img src='" + unit.graphic.split(" ").join("-").toLowerCase() + "' class='unit-graphic'>";
 		if (unit.special) {
 			outputHTML += "<div class='stat-box special-box'><img src='./images/" + unit.special.toLowerCase() + ".png'></div>";
 		}
