@@ -1,0 +1,23 @@
+.grid {
+	padding-top: 125px;
+	white-space: nowrap;
+}
+		
+.gridSpace {
+	width: 250px;
+	height: 250px;
+	border: 2px black solid;
+	display: inline-block;
+	margin: 5px;
+	padding: 5px;
+	position: relative;
+	text-align: center;
+}
+		
+.evenSpace {
+	top: -125px
+}
+
+.coord {
+	font-size: 1.5em
+}
