@@ -3,7 +3,22 @@ var Space = function(x, y, terrain){
 	this.y = y;
 	if (terrain) {
 		this.terrain = terrain
-	} else {this.terran = "plains"}
+	} else {this.terrain = 
+		{"name": "plains"}
+	}
+}
+
+Space.prototype.render = function() {
+	var outputHTML = "<div class='gridSpace row" + this.y + " column" + this.x;
+	if (this.x % 2 != 0) {
+		outputHTML += " evenSpace";
+	}
+	outputHTML += "'><div class='coord'>" + this.x + ", " + this.y + "</div>";
+	if (this.contains) {
+		outputHTML += this.contains.render()
+	}
+	outputHTML += "</div>";
+	return outputHTML
 }
 
 Space.prototype.isAdjacentTo = function(space){

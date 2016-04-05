@@ -17,18 +17,43 @@ var Unit = function(unit) {
 	
 	this.tokens = [];
 	
-	this.graphic = "./images/" + unit.race + "-" + unit.name + ".png";
+	this.graphic = "./images/" + unit.race + "-" + unit.name.split(" ").join("-").toLowerCase() + ".png";
+}
+
+Unit.prototype.render = function(){
+	var outputHTML = "<div class='unit-card unit-" + this.race;
+	if (this.level > 1){
+		outputHTML += " unit-level" + this.level;
+	}
+	outputHTML += "'>";
+	outputHTML += "<div class='unit-name'>" + this.name + "</div>";
+	var stats = ["attack", "defense", "move", "range"];
+	for (var i = 0; i < stats.length; i++){
+		outputHTML += createStatBox(stats[i], this);
+	}
+	outputHTML += "<img src='" + this.graphic + "' class='unit-graphic'>"
+	if (this.special) {
+		outputHTML += "<div class='stat-box special-box'><img src='./images/" + this.special.toLowerCase() + ".png'></div>"
+	}
+	outputHTML += "</div>"
+	return outputHTML
+}
+
+var createStatBox = function(stat, unit){
+	var outputHTML = "<div class='stat-box " + stat + "-box'>" + unit[stat]["value"];
+	if (unit[stat]["special"]) {
+		outputHTML += "<span style='font-size: .5em'>*</span>"
+	}
+	outputHTML += "</div>";
+	return outputHTML
 }
 
 var setStat = function(unit, stat) {
 	var returnStat={};
-	
 	if (unit[stat]) {
-		
 		if (unit[stat]["value"]) {
 			returnStat["value"] = unit[stat]["value"]
 		} else {returnStat["value"] = 1}	
-		
 		if (unit[stat]["special"]) {
 			returnStat["special"] = true
 		}
@@ -43,6 +68,5 @@ var setStat = function(unit, stat) {
 			}
 		}
 	}
-	
 	return returnStat
 }
