@@ -29,33 +29,28 @@ var map = ["......",
 		   "--..--",
 		   ".-^--.",
 		   "=.##..",
-		   "..##.#",
+		   "..##.=",
 		   ".--^-.",
 		   "--..--",
 		   "......"]
 	
 var terrain = {
-	"#": {"Name": "Forest",
+	"#": {"name": "Forests",
 		"blocksLOS": true,
 		"x2Movement": true,
 		"addsDefense": true},
 	".": {"name": "Plains"},
 	"Y": {"name": "River",
 		"hazard": true},
-	"-": {"name": "Hill",
+	"-": {"name": "Hills",
 		"addMeleeDefense": true,
 		"extendsLOS": true},
-	"^": {"name": "Mountain",
+	"^": {"name": "Mountains",
 		"blocksLOS": true,
 		"blocksMovement": true},
 	"=": {"name": "Fort",
 		"addsDefense": true},
-	"!": {"name": "Wizard's Tower",
+	"!": {"name": "Wizard Tower",
 		"extendLOS": true,
 		"addsDefense": true}
 }
-
-var sampleMap = new Map(map);
-console.log(sampleMap);
-sampleMap.spaces[3][0].contains = new Unit(humanUnits.spearmen);
-console.log(sampleMap.spaces[3][0]);
