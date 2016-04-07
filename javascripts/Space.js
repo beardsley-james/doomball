@@ -64,3 +64,21 @@ Space.prototype.canMoveTo = function(space) {
 	}
 	return true
 }
+
+Space.prototype.containsEnemyUnit = function(space){
+	if (!this.contains || !space.contains) {
+		return false
+	}
+	if (this.contains.player != space.contains.player) {
+		return true
+	} 
+	return false
+}
+
+Space.prototype.isElevated = function() {
+	if (this.contains.range.special || this.terrain.extendsLOS) {
+		return true
+	}
+	return false
+}
+
