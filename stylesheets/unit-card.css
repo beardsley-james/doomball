@@ -85,3 +85,18 @@
 	bottom: 0px;
 	right: 0px
 }
+
+.tokens {
+	position: absolute;
+	top: 40px;
+	left: 0px
+}
+
+.inactive {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-image: url('../images/token-inactive.png');
+	width: 200px;
+	height: 200px;
+}
