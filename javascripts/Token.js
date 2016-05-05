@@ -1,8 +1,6 @@
 var Token = function(){
 	this.name = "string";
 	this.unique = true;
-
-	this.url = "string"
 }
 
 /* Was considering adding an x, y locator object and an owner object but
