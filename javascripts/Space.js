@@ -1,3 +1,5 @@
+var alphabet = ["A", "B", "C", "D", "E", "F", "G"]
+
 var Space = function(x, y, terrain){
 	this.x = x;
 	this.y = y;
@@ -22,7 +24,7 @@ Space.prototype.render = function() {
 	if (this.targetable) {
 		ouputHTML += " targetable"
 	}
-	outputHTML += "'><div class='coord'>" + this.x + ", " + this.y + " " + this.terrain.name + "</div>";
+	outputHTML += "'><div class='coord'>" + alphabet[this.x] + (this.y + 1) + " " + this.terrain.name + "</div>";
 	if (this.contains) {
 		outputHTML += this.contains.render()
 	}
@@ -82,3 +84,8 @@ Space.prototype.isElevated = function() {
 	return false
 }
 
+Space.prototype.isEntrenched = function() {
+	if (this.terrain.addsDefense) {
+		return true
+	}
+}
