@@ -11,6 +11,7 @@ var Map = function(map, name){
 		}
 		this.spaces.push(section)
 	}
+	this.activePlayer = "player1";
 }
 
 Map.prototype.render = function(){
@@ -68,6 +69,49 @@ Map.prototype.availableTargets = function(y, x){
 	})
 	return targets
 }
+
+Map.prototype.movableSpaces = function(y, x){
+	var space = this.spaces[y][x];
+	if (space.contains){
+		var spacesInRange = [space];
+		var range = space.contains.move.value;
+		var showStoppers = [];
+		while (range > 0) {
+			var nextRing = spacesInRange.forEach(function(tempSpace){
+				var adjacentSpaces = this.adjacentSpaces(tempSpace.y, tempSpace.x);
+				adjacentSpaces.forEach(function(candidate){
+					if (spacesInRange.indexOf(candidate) == -1){
+						if (!candidate.contains && candidate.terrain.x2Movement) {
+							showStoppers.push(candidate)
+						} else if (!candidate.contains && !candidate.terrain.blocksMovement){
+							spacesInRange.push(candidate)
+						}
+					}
+				})
+			}, this)
+			range -= 1;
+			console.log(showStoppers)
+		}
+		spacesInRange.shift();
+		spacesInRange = spacesInRange.concat(showStoppers);
+		console.log(spacesInRange);
+		console.log(showStoppers);
+		return spacesInRange
+	}
+}
+
+/* Map.prototype.movableSpaces = function(y, x){
+	var homeSpace = this.spaces[y][x];
+	var adjacentSpaces = this.adjacentSpaces(y, x);
+	var targets = [];
+	adjacentSpaces.forEach(function(space){
+		if (homeSpace.canMoveTo(space)){
+			console.log(space);
+			targets.push(space)
+		}
+	})
+	return targets
+} */
 
 Map.prototype.adjacentSpaces = function(y, x){
 	var base = this.spaces[y][x];
