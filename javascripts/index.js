@@ -1,8 +1,11 @@
 var sampleMap = new Map(map);
 sampleMap.spaces[0][0].contains = new Unit(humanUnits.spearmen);
 sampleMap.spaces[0][0].contains.player = "player1";
+sampleMap.spaces[0][0].contains.hits = 2;
 sampleMap.spaces[0][1].contains = new Unit(humanUnits.archers);
+var sampleArcher = sampleMap.spaces[0][1].contains;
 sampleMap.spaces[0][1].contains.player = "player1";
+
 sampleMap.spaces[0][2].contains = new Unit(humanUnits.mage);
 sampleMap.spaces[0][2].contains.player = "player1";
 
@@ -21,13 +24,10 @@ $(document).ready(function(){
 		var x = classes[2].charAt(3);
 		var y = classes[1].charAt(3);
 		var activeSpace = activeGame.spaces[y][x];
-		console.log(x + " " + y);
+		$(".activeSpace").removeClass("activeSpace");
 		if (activeGame.spaces[y][x].contains) {
-			if ($(".targetable")){
-				$(".targetable").removeClass("targetable")
-			}
-			if ($(".activeSpace")) {
-				$(".activeSpace").removeClass("activeSpace")
+			if ($(this).hasClass("targetable")){
+				return
 			}
 			$(this).addClass("activeSpace");
 			$("div#grid .gridSpace").each(function(){
@@ -41,7 +41,6 @@ $(document).ready(function(){
 				}
 			})
 			var spacesInRange = activeGame.availableTargets(y, x);
-			console.log(spacesInRange);
 			spacesInRange.forEach(function(space){
 				$(".row" + space.y + ".col" + space.x).addClass("targetable")
 			})
@@ -53,12 +52,24 @@ $(document).ready(function(){
 		activeGame.spaces[targetSpace.y][targetSpace.x].contains = activeGame.spaces[activeSpace.y][activeSpace.x].contains;
 		delete activeGame.spaces[activeSpace.y][activeSpace.x].contains;
 		$(".activeSpace").replaceWith(activeGame.spaces[activeSpace.y][activeSpace.x].render());
-		$(".activeSpace")
 		$(this).replaceWith(activeGame.spaces[targetSpace.y][targetSpace.x].render());
-		console.log(activeGame.spaces[targetSpace.y][targetSpace.x]);
 		$(".gridSpace").each(function(){
 			$(this).removeClass("movable");
 			$(this).removeClass("targetable");
+		})
+	})
+	$("div#grid").on("click", ".targetable", function(){
+		var activeSpace = getXY($(".activeSpace"));
+		var targetSpace = getXY($(this));
+		activeGame.spaces[activeSpace.y][activeSpace.x].contains.attacks(activeGame.spaces[targetSpace.y][targetSpace.x].contains);
+		if (activeGame.spaces[targetSpace.y][targetSpace.x].contains.hits > activeGame.spaces[targetSpace.y][targetSpace.x].contains.defense.value) {
+			delete activeGame.spaces[targetSpace.y][targetSpace.x].contains;
+		}
+		$(this).replaceWith(activeGame.spaces[targetSpace.y][targetSpace.x].render());
+		$(".gridSpace").each(function(){
+			$(this).removeClass("movable");
+			$(this).removeClass("targetable");
+			$(this).removeClass("activeSpace")
 		})
 	})
 })
