@@ -27,3 +27,9 @@ document.write(renderUnitCard(new Unit(undeadUnits.skeletons)));
 document.write(renderUnitCard(new Unit(undeadUnits.catapult)));
 document.write(renderUnitCard(new Unit(undeadUnits["hell hound"])));
 document.write(renderUnitCard(new Unit(undeadUnits.necromancer)));
+for (var type in woodElfUnits) {
+	console.log(woodElfUnits[type]);
+	var unit = new Unit(woodElfUnits[type]);
+	console.log(unit);
+	document.write(unit.render())
+}
