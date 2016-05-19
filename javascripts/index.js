@@ -1,80 +1,64 @@
-var sampleMap = new Map(map);
-sampleMap.spaces[0][0].contains = new Unit(humanUnits.spearmen);
-sampleMap.spaces[0][0].contains.player = "player1";
-sampleMap.spaces[0][0].contains.hits = 2;
-sampleMap.spaces[0][1].contains = new Unit(humanUnits.archers);
-var sampleArcher = sampleMap.spaces[0][1].contains;
-sampleMap.spaces[0][1].contains.player = "player1";
-
-sampleMap.spaces[0][2].contains = new Unit(humanUnits.mage);
-sampleMap.spaces[0][2].contains.player = "player1";
-
-sampleMap.spaces[4][5].contains = new Unit(orcUnits.fighters);
-sampleMap.spaces[4][5].contains.player = "player2";
-sampleMap.spaces[4][4].contains = new Unit(orcUnits.troll);
-sampleMap.spaces[4][4].contains.player = "player2";
-sampleMap.spaces[4][3].contains = new Unit(orcUnits["wolf riders"]);
-sampleMap.spaces[4][3].contains.player = "player2";
+/** Globals **/
+var activeGame = sampleMap;
+var activeElement, active, x, y, activeSpace, activeUnit;
+var targetElement, target, targetX, targetY, targetSpace, targetUnit;
 
 $(document).ready(function(){
-	var activeGame = sampleMap;
-	$("div#bucket").html(activeGame.render());
-	$("div#grid").on("click", ".gridSpace", function(){
-		var classes = $(this).attr("class").split(" ");
-		var x = classes[2].charAt(3);
-		var y = classes[1].charAt(3);
-		var activeSpace = activeGame.spaces[y][x];
-		$(".activeSpace").removeClass("activeSpace");
-		if (activeGame.spaces[y][x].contains) {
-			if ($(this).hasClass("targetable")){
-				return
-			}
-			$(this).addClass("activeSpace");
-			$("div#grid .gridSpace").each(function(){
-				$(this).removeClass("movable");
-				var targetClasses = $(this).attr("class").split(" ");
 
-				var targetX = targetClasses[2].charAt(3);
-				var targetY = targetClasses[1].charAt(3);
-				if (activeGame.spaces[y][x].canMoveTo(activeGame.spaces[targetY][targetX])) {
-					$(this).addClass("movable")
+	renderMap();
+	
+	$("div#bucket").on("click", ".gridSpace", function(){
+		setTargetElement($(this));
+		if (targetUnit) {
+			if (($(".activeSpace").length === 0 || activeUnit.player == targetUnit.player) && !targetUnit.inactive){
+				stripClass("activeSpace");
+				setActiveElement($(this));
+				$(this).addClass("activeSpace");
+			}
+			if (targetElement.hasClass("targetable")){
+				activeUnit.attacks(targetUnit);
+				if (targetUnit.hits > targetUnit.defense.value) {
+					delete targetSpace.contains
 				}
-			})
-			var spacesInRange = activeGame.availableTargets(y, x);
-			spacesInRange.forEach(function(space){
-				$(".row" + space.y + ".col" + space.x).addClass("targetable")
-			})
+				activeUnit.inactive = true
+				renderSpaces();
+			}
+		} else if ($(".activeSpace".length > 1)) {
+			if (targetElement.hasClass("movable")){
+				targetSpace.contains = activeSpace.contains;
+				delete activeSpace.contains;
+				renderSpaces();
+			}
 		}
-	})
-	$("div#grid").on("click", ".movable", function(){
-		var activeSpace = getXY($(".activeSpace"));
-		var targetSpace = getXY($(this));
-		activeGame.spaces[targetSpace.y][targetSpace.x].contains = activeGame.spaces[activeSpace.y][activeSpace.x].contains;
-		delete activeGame.spaces[activeSpace.y][activeSpace.x].contains;
-		$(".activeSpace").replaceWith(activeGame.spaces[activeSpace.y][activeSpace.x].render());
-		$(this).replaceWith(activeGame.spaces[targetSpace.y][targetSpace.x].render());
-		$(".gridSpace").each(function(){
-			$(this).removeClass("movable");
-			$(this).removeClass("targetable");
-		})
-	})
-	$("div#grid").on("click", ".targetable", function(){
-		var activeSpace = getXY($(".activeSpace"));
-		var targetSpace = getXY($(this));
-		activeGame.spaces[activeSpace.y][activeSpace.x].contains.attacks(activeGame.spaces[targetSpace.y][targetSpace.x].contains);
-		if (activeGame.spaces[targetSpace.y][targetSpace.x].contains.hits > activeGame.spaces[targetSpace.y][targetSpace.x].contains.defense.value) {
-			delete activeGame.spaces[targetSpace.y][targetSpace.x].contains;
-		}
-		$(this).replaceWith(activeGame.spaces[targetSpace.y][targetSpace.x].render());
-		$(".gridSpace").each(function(){
-			$(this).removeClass("movable");
-			$(this).removeClass("targetable");
-			$(this).removeClass("activeSpace")
-		})
+		
+
 	})
 })
 
-function getXY(element){
+
+var setActiveElement = function(element){
+	activeElement = element;
+	active = getXY(element);
+	x = active.x;
+	y = active.y;
+	activeSpace = activeGame.spaces[y][x];
+	activeUnit = activeSpace.contains
+	setMovable();
+	setTargetable();
+}
+
+var setTargetElement = function(element){
+	targetElement =  element;
+	target = getXY(element);
+	targetX = target.x;
+	targetY = target.y;
+	targetSpace = activeGame.spaces[targetY][targetX];
+	if (targetSpace.contains) {
+		targetUnit = targetSpace.contains
+	} else {targetUnit = undefined}
+}
+
+var getXY = function(element){
 	var classes = element.attr("class").split(" ");
 	var x = classes[2].charAt(3);
 	var y = classes[1].charAt(3);
@@ -82,4 +66,35 @@ function getXY(element){
 		"x": x,
 		"y": y
 	}
+}
+
+var stripClass = function(classname){
+	$("." + classname).removeClass(classname)
+}
+
+var setMovable = function(){
+	stripClass("movable");
+	var movableSpaces = activeGame.movableSpaces(y, x);
+	movableSpaces.forEach(function(space){
+		$(".row" + space.y + ".col" + space.x).addClass("movable")
+	})
+}
+
+var setTargetable = function(){
+	stripClass("targetable");
+	var availableTargets = activeGame.availableTargets(y, x);
+	availableTargets.forEach(function(space){
+		$(".row" + space.y + ".col" + space.x).addClass("targetable")
+	})
+}
+
+var renderSpaces = function() {
+	activeElement.replaceWith(activeSpace.render());
+	targetElement.replaceWith(targetSpace.render());
+	stripClass("movable");
+	stripClass("targetable")
+}
+
+var renderMap = function(){
+	$("div#bucket").html(activeGame.render());
 }
