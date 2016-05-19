@@ -11,7 +11,6 @@ var Map = function(map, name){
 		}
 		this.spaces.push(section)
 	}
-	this.activePlayer = "player1";
 }
 
 Map.prototype.render = function(){
@@ -74,7 +73,9 @@ Map.prototype.movableSpaces = function(y, x){
 	var space = this.spaces[y][x];
 	if (space.contains){
 		var spacesInRange = [space];
-		var range = space.contains.move.value;
+		if (space.contains.hasMoved) {
+			var range = 0;
+		} else {var range = space.contains.move.value;}
 		var showStoppers = [];
 		while (range > 0) {
 			var nextRing = spacesInRange.forEach(function(tempSpace){
@@ -94,8 +95,6 @@ Map.prototype.movableSpaces = function(y, x){
 		}
 		spacesInRange.shift();
 		spacesInRange = spacesInRange.concat(showStoppers);
-		console.log(spacesInRange);
-		console.log(showStoppers);
 		return spacesInRange
 	}
 }
@@ -124,6 +123,40 @@ Map.prototype.adjacentSpaces = function(y, x){
 		})
 	})
 	return returnArray
+}
+
+Map.prototype.switchActivePlayer = function(){
+	if (this.activePlayer == "player1") {
+		this.activePlayer = "player2"
+	} else {this.activePlayer = "player1"}
+	console.log(this.activePlayer + " is active")
+	
+	this.spaces.forEach(function(row){
+		row.forEach(function(space){
+			if (space.contains && (space.contains.player == this.activePlayer)) {
+				space.contains.hits = 0;
+				space.contains.hasMoved = false;
+				space.contains.notInactive();
+			} else if (space.contains) {
+				space.contains.inactive = true;
+			}
+		}, this)
+	}, this)
+	renderMap();
+}
+
+Map.prototype.checkIfTurnComplete = function(){
+	var turnComplete = true;
+	this.spaces.forEach(function(row){
+		row.forEach(function(space){
+			if (space.contains && (space.contains.player == this.activePlayer)) {
+				if (!space.contains.inactive) {
+					turnComplete = false;
+				}
+			}
+		}, this)
+	}, this)
+	return turnComplete;
 }
 
 var map = ["......",
