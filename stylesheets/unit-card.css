@@ -32,6 +32,11 @@
 	color: white;
 }
 
+.unit-woodelf {
+	background-image: url('../images/background-woodelf.png');
+	color: white;
+}
+
 .unit-name {
 	font-size: 25px;
 	width: 120px;
