@@ -20,8 +20,6 @@ var Unit = function(unit) {
 	this.graphic = "./images/" + unit.race + "-" + unit.name.split(" ").join("-").toLowerCase() + ".png";
 	
 	this.hits = 0;
-	
-	this.inactive = true;
 }
 
 Unit.prototype.attacks = function(target) {
@@ -58,6 +56,18 @@ Unit.prototype.render = function(){
 	});
 	outputHTML += "</div>"
 	return outputHTML
+}
+
+Unit.prototype.inactivate = function(){
+	this.inactive = true;
+	if (activeGame.checkIfTurnComplete()){
+		activeGame.switchActivePlayer();
+		renderMap();
+	}
+}
+
+Unit.prototype.notInactive = function(){
+	this.inactive = false;
 }
 
 var createStatBox = function(stat, unit){
