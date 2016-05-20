@@ -17,7 +17,7 @@ var woodElfUnits = {
 		"level": 1,
 		"special": "Steadfast",
 		"defense": {
-			"value": 1
+			"value": 2
 		}
 	},
 	"woodelves": {
@@ -79,7 +79,7 @@ var woodElfUnits = {
 			"value": 2
 		},
 		"move": {
-			"value": 0
+			"value": "0"
 		}
 	},
 	"elderdryad": {

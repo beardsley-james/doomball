@@ -37,6 +37,14 @@
 	color: white;
 }
 
+.unit-dwarf {
+	background-image: url('../images/background-dwarf.png');
+}
+
+.unit-highelf {
+	background-image: url('../images/background-highelf.png');
+}
+
 .unit-name {
 	font-size: 25px;
 	width: 120px;

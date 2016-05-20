@@ -33,3 +33,11 @@ for (var type in woodElfUnits) {
 	console.log(unit);
 	document.write(unit.render())
 }
+for (var type in dwarfUnits) {
+	var unit = new Unit(dwarfUnits[type]);
+	document.write(unit.render())
+}
+for (var type in highElfUnits) {
+	var unit = new Unit(highElfUnits[type]);
+	document.write(unit.render())
+}

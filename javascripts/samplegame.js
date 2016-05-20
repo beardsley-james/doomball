@@ -15,6 +15,9 @@ sampleMap.spaces[0][1].contains = new Unit(humanUnits.archers);
 var sampleArcher = sampleMap.spaces[0][1].contains;
 sampleMap.spaces[0][1].contains.player = "player1";
 
+sampleMap.spaces[5][5].contains = new Unit(woodElfUnits.poisonbloom);
+sampleMap.spaces[5][5].contains.player = "player1";
+
 sampleMap.spaces[0][2].contains = new Unit(humanUnits.mage);
 sampleMap.spaces[0][2].contains.player = "player1";
 
