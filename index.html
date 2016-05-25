@@ -1,31 +1,38 @@
-<head>
-	<link rel="stylesheet" href="./stylesheets/unit-card.css">
-	<link rel="stylesheet" href="./stylesheets/grid.css">
-	<link rel="stylesheet" href="./stylesheets/normalize.css">
-	<link href='https://fonts.googleapis.com/css?family=Carter+One|Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
-	<style>
-		.unit-card {
-			float: left;
-			margin: 5px;
-			overflow: visible
-		}
-	</style>
-</head>
+<!DOCTYPE html>
 
-<body>
-	<script src="./javascripts/zepto.min.js"></script>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content=""/>
+		<meta name="keywords" content=""/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="./stylesheets/unit-card.css">
+		<link rel="stylesheet" href="./stylesheets/normalize.css">
+		<link rel="stylesheet" href="./stylesheets/grid.css">
+		<link href='https://fonts.googleapis.com/css?family=Carter+One|Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+		<title></title>
+	</head>
+	<body>	
 	
-	<script src="./javascripts/humanunits.js"></script>
-	<script src="./javascripts/undeadunits.js"></script>
-	<script src="./javascripts/orcunits.js"></script>
-	<script src="./javascripts/woodelfunits.js"></script>
-	<script src="./javascripts/dwarfunits.js"></script>
-	<script src="./javascripts/highelfunits.js"></script>
-	<script src="./javascripts/Unit.js"></script>
-	<script src="./javascripts/renderUnitCard.js"></script>
+		<form id="teamSelect">
+			
+			<h2>Select Attacker</h2>
+			<div id="attackerSelect"></div>
+			<h2>Select Defender</h2>
+			<div id="defenderSelect"></div>
+			<button id="submit">Fight it Out</button>
+			
+		</form>
 	
-	<script src="./javascripts/test.js"></script>
-	
-	<script src="./javascripts/Space.js"></script>
-	<script src="./javascripts/Map.js"></script>
-</body>
+		<div id='bucket'></div>
+		
+		<script src="./javascripts/zepto.min.js"></script>
+		<script src="./javascripts/Unit.js"></script>
+		<script src="./javascripts/Space.js"></script>
+		<script src="./javascripts/Map.js"></script>
+		<script src="./javascripts/armylist.js"></script>
+		<script src="./javascripts/units.js"></script>
+		<script src="./javascripts/index.js"></script>
+		
+	</body>
+</html>
