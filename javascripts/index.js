@@ -30,6 +30,10 @@ $("#bucket").on("click", ".gridSpace", function(){
 		if (targetElement.hasClass("activeSpace")){
 			activeUnit.inactivate();
 			renderSpaces();
+			if (activeGame.checkIfTurnComplete()){
+				activeGame.switchActivePlayer();
+				renderMap();
+			}
 		} else if (($(".activeSpace").length === 0 || activeUnit.player == targetUnit.player) && !targetUnit.inactive && targetUnit.player == activeGame.activePlayer){
 			stripClass("activeSpace");
 			setActiveElement($(this));
@@ -37,9 +41,22 @@ $("#bucket").on("click", ".gridSpace", function(){
 			activeUnit.attacks(targetUnit);
 			if (targetUnit.hits > targetUnit.defense.value) {
 				delete targetSpace.contains
+			} else if (targetUnit.hits == targetUnit.defense.value) {
+				var retreatableSpaces = activeGame.retreatableSpaces(targetY, targetX);
+				if (retreatableSpaces.length == 0) {
+					delete targetSpace.contains
+				} else {
+					var randomSpace = Math.floor(Math.random() * retreatableSpaces.length);
+					console.log(randomSpace);
+					var coords = retreatableSpaces[randomSpace];
+					console.log(coords);
+					activeGame.spaces[coords[0]][coords[1]].contains = targetSpace.contains;
+					console.log(targetSpace.contains);
+					delete targetSpace.contains;
+				}
 			}
 			activeUnit.inactivate();
-			renderSpaces();
+			renderMap();
 		}
 	} else if ($(".activeSpace".length > 1)) {
 		if (targetElement.hasClass("movable")){
@@ -50,6 +67,7 @@ $("#bucket").on("click", ".gridSpace", function(){
 			setActiveElement($(".row" + targetY + ".col" + targetX));
 		}
 	}
+	
 	activeGame.checkIfTurnComplete();
 })
 

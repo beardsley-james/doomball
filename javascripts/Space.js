@@ -24,7 +24,8 @@ Space.prototype.render = function() {
 	if (this.targetable) {
 		ouputHTML += " targetable"
 	}
-	outputHTML += "'><div class='coord'>" + alphabet[this.x] + (this.y + 1) + " " + this.terrain.name + "</div>";
+	outputHTML += "'><div class='coord'>" + // alphabet[this.x] + (this.y + 1) + 
+		this.y + " " + this.x + " " + this.terrain.name + "</div>";
 	if (this.contains) {
 		outputHTML += this.contains.render()
 	}

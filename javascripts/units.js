@@ -496,5 +496,97 @@ var units = {
 				"value": 3
 			}
 		}
+	},
+	"centaur": {
+		"warriors": {
+			"race": "centaur",
+			"name": "Warriors",
+			"special": "Charging",
+			"move": {
+				"value": 2
+			}
+		},
+		"archers": {
+			"race": "centaur",
+			"name": "Archers",
+			"special": "Pinning",
+			"range": {
+				"value": 2
+			},
+			"attack": {
+				"special": true
+			},
+			"move": {
+				"value": 2
+			}
+		},
+		"slavers": {
+			"race": "centaur",
+			"name": "Slavers",
+			"special": "Cowardly",
+			"attack": {
+				"value": 1
+			},
+			"defense": {
+				"value": 2
+			}
+		},
+		"thunderhooves": {
+			"race": "centaur",
+			"name": "Thunderhooves",
+			"level": 2,
+			"special": "Charging",
+			"attack": {
+				"value": 2
+			},
+			"move": {
+				"value": 2
+			}
+		},
+		"warwagon": {
+			"race": "centaur",
+			"name": "Warwagon",
+			"level": 2,
+			"special": "Piercing",
+			"range": {
+				"value": 3
+			},
+			"attack": {
+				"special": true
+			},
+			"defense": {
+				"value": 2
+			},
+			"move": {
+				"value": 2
+			}
+		},
+		"huntingparty": {
+			"race": "centaur",
+			"name": "Hunting Party",
+			"level": 2,
+			"special": "Leadership",
+			"range": {
+				"value": 2
+			},
+			"move": {
+				"value": 2
+			}
+		},
+		"warstallion": {
+			"race": "centaur",
+			"name": "Warstallion",
+			"level": 3,
+			"special": "Explosive",
+			"attack": {
+				"value": 4
+			},
+			"defense": {
+				"value": 2
+			},
+			"move": {
+				"value": 2
+			}
+		}
 	}
 }

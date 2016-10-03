@@ -91,12 +91,35 @@ Map.prototype.movableSpaces = function(y, x){
 				})
 			}, this)
 			range -= 1;
-			console.log(showStoppers)
 		}
 		spacesInRange.shift();
 		spacesInRange = spacesInRange.concat(showStoppers);
 		return spacesInRange
 	}
+}
+
+Map.prototype.retreatableSpaces = function (y, x){
+	var space = this.spaces[y][x];
+	var spaces = [];
+	var colType= "";
+	console.log(x % 2);
+	if (x % 2 == 0) {
+		colType = "even"
+	} else {colType = "odd"};
+	var player = space.contains.player;
+	var modifiers = retreatModifiers[player][colType];
+	console.log(colType + " " + player + " " + modifiers);
+	modifiers.forEach(function(modifier){
+		var tempY = (Number(y) + modifier[0]);
+		var tempX = (Number(x) + modifier[1]);
+		console.log(tempY + " " + tempX);
+		var candidate = this.spaces[tempY][tempX];
+		if (space.canMoveTo(candidate)) {
+			spaces.push([tempY, tempX])
+			console.log(tempY + " " + tempX + " true")
+		}
+	}, this)
+	return spaces
 }
 
 /* Map.prototype.movableSpaces = function(y, x){
@@ -157,6 +180,17 @@ Map.prototype.checkIfTurnComplete = function(){
 		}, this)
 	}, this)
 	return turnComplete;
+}
+
+var retreatModifiers = {
+	"player2": {
+		"even": [[0, -1], [-1, 0], [0, 1]],
+		"odd": [[-1, -1], [-1, 0], [-1, 1]]
+	},
+	"player1": {
+		"even": [[1, -1], [1, 0], [1, 1]],
+		"odd": [[0, -1], [1, 0], [0, 1]]
+	}
 }
 
 var map = ["......",

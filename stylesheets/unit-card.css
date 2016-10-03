@@ -57,7 +57,8 @@
 .unit-graphic {
 	position: absolute;
 	top: 40px;
-	left: 0px
+	left: 0px;
+	width: 100%
 }
 
 .stat-box {
