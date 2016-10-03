@@ -1,3 +1,5 @@
+## [Play the Game](http://beardsley-james.github.io/doomball/)
+
 SETUP
 
 The game is played on a 6 x 8 hex grid, 6 columns labeled 1-6 and 8 rows labeled A - H. Rows A - C are deployment side A, and rows F - H are deployment side H. The two players draft their armies as such:
