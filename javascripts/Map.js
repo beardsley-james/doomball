@@ -108,32 +108,18 @@ Map.prototype.retreatableSpaces = function (y, x){
 	} else {colType = "odd"};
 	var player = space.contains.player;
 	var modifiers = retreatModifiers[player][colType];
-	console.log(colType + " " + player + " " + modifiers);
 	modifiers.forEach(function(modifier){
 		var tempY = (Number(y) + modifier[0]);
 		var tempX = (Number(x) + modifier[1]);
-		console.log(tempY + " " + tempX);
 		var candidate = this.spaces[tempY][tempX];
-		if (space.canMoveTo(candidate)) {
-			spaces.push([tempY, tempX])
-			console.log(tempY + " " + tempX + " true")
+		if (!(tempY < 0 || tempX < 0 || tempY > this.height - 1 || tempX > this.width -1 )) {
+			if (space.canMoveTo(candidate)) {
+				spaces.push([tempY, tempX])
+			}
 		}
 	}, this)
 	return spaces
 }
-
-/* Map.prototype.movableSpaces = function(y, x){
-	var homeSpace = this.spaces[y][x];
-	var adjacentSpaces = this.adjacentSpaces(y, x);
-	var targets = [];
-	adjacentSpaces.forEach(function(space){
-		if (homeSpace.canMoveTo(space)){
-			console.log(space);
-			targets.push(space)
-		}
-	})
-	return targets
-} */
 
 Map.prototype.adjacentSpaces = function(y, x){
 	var base = this.spaces[y][x];

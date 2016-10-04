@@ -41,7 +41,7 @@ $("#bucket").on("click", ".gridSpace", function(){
 			activeUnit.attacks(targetUnit);
 			if (targetUnit.hits > targetUnit.defense.value) {
 				delete targetSpace.contains
-			} else if (targetUnit.hits == targetUnit.defense.value) {
+			} else if (targetUnit.hits == targetUnit.defense.value  && targetUnit.special != "Steadfast") {
 				var retreatableSpaces = activeGame.retreatableSpaces(targetY, targetX);
 				if (retreatableSpaces.length == 0) {
 					delete targetSpace.contains
@@ -53,6 +53,11 @@ $("#bucket").on("click", ".gridSpace", function(){
 					activeGame.spaces[coords[0]][coords[1]].contains = targetSpace.contains;
 					console.log(targetSpace.contains);
 					delete targetSpace.contains;
+					if (activeUnit.special == "Overrun") {
+						targetSpace.contains = activeSpace.contains;
+						delete activeSpace.contains;
+						targetSpace.contains.hasMoved = true;
+					}
 				}
 			}
 			activeUnit.inactivate();
