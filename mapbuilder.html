@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content=""/>
+		<meta name="keywords" content=""/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="./stylesheets/unit-card.css">
+		<link rel="stylesheet" href="./stylesheets/normalize.css">
+		<link rel="stylesheet" href="./stylesheets/grid.css">
+		<link rel="stylesheet" href="./stylesheets/mapbuilder.css">
+		<link href='https://fonts.googleapis.com/css?family=Carter+One|Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+		<title>Doomball</title>
+	</head>
+	<body>	
+	
+		<form id="menu">
+			
+			<h2>Create a map</h2>
+			
+			<h3>Dimensions</h3>
+			
+			Width:
+				<input type="text" value="6" size="2" id="width"></input>
+			Height:
+				<input type="text" value="8" size="2" id="height"></input>
+				
+			<h3>Default Terrain</h3>
+			
+			<select name="terrain" id="terrain"></select>
+			
+			<h3>Player 1</h3>
+			
+			<select name="player1" id="player1"></select>
+			
+			<h3>Player 2</h3>
+			
+			<select name="player2" id="player2"></select>
+			
+			<button id="submit">Generate Map Template</button>
+			
+		</form>
+	
+		<div id='bucket'></div>
+		
+		<script src="./javascripts/zepto.min.js"></script>
+		<script src="./javascripts/Unit.js"></script>
+		<script src="./javascripts/Space.js"></script>
+		<script src="./javascripts/Map.js"></script>
+		<script src="./javascripts/armylist.js"></script>
+		<script src="./javascripts/units.js"></script>
+		<script src="./javascripts/mapbuilder.js"></script>
+		
+	</body>
+</html>
