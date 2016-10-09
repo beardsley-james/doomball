@@ -6,7 +6,7 @@ var Space = function(x, y, terrain){
 	if (terrain) {
 		this.terrain = terrain
 	} else {this.terrain = 
-		{"name": "plains"}
+		{"name": "Plains"}
 	}
 }
 

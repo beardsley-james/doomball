@@ -189,13 +189,11 @@ var map = ["......",
 		   "......"]
 	
 var terrain = {
+	".": {"name": "Plains"},
 	"#": {"name": "Forests",
 		"dropsLOS": true,
 		"x2Movement": true,
 		"addsDefense": true},
-	".": {"name": "Plains"},
-	"Y": {"name": "River",
-		"hazard": true},
 	"-": {"name": "Hills",
 		"addMeleeDefense": true,
 		"extendsLOS": true},
@@ -204,6 +202,8 @@ var terrain = {
 		"blocksMovement": true},
 	"=": {"name": "Fort",
 		"addsDefense": true},
+	"Y": {"name": "River",
+		"hazard": true},
 	"!": {"name": "Wizard Tower",
 		"extendsLOS": true,
 		"addsDefense": true}

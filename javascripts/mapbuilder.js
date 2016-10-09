@@ -1,7 +1,5 @@
 var activeGame;
-var activeElement, active, x, y, activeSpace, activeUnit;
 var targetElement, target, targetX, targetY, targetSpace, targetUnit;
-var turnCount = 0;
 var player1Race, player2Race;
 
 $(document).ready(function(){
@@ -40,30 +38,63 @@ $("#submit").on("click", function(e){
 		mapArray.push(rowString)
 	}
 	
-	console.log(mapArray);
-	
 	activeGame = new Map(mapArray);
+	
+	$("#menu").html(
+		"<h2>Select a space to edit</h2>"
+	)
 	
 	renderMap()
 	
 })
 
-$("#bucket").on("click", ".gridSpace", function(){
-	
+var renderMenu = function(){
+	$("#menu").html("");
+	$("<h2>").appendTo($("#menu")).text("Editing space " + targetY + " " + targetX);
+	$("<h3>").appendTo($("#menu")).text("Terrain");
+	$("<select>").appendTo($("#menu")).attr("id", "spaceTerrain");
+	for (var key in terrain){
+		$("<option>").appendTo($("#spaceTerrain")).attr("value", key).text(terrain[key].name)
+	}
+	$("<h3>").appendTo($("#menu")).text("Unit");
+	$("<select>").appendTo($("#menu")).attr("id", "spaceUnit");
+	$("<option>").appendTo($("#spaceUnit")).attr("value", "None").text("Empty space");
+	$("<option>").appendTo($("#spaceUnit")).attr("value", "None").text("Player 1");
+	for (var key in units[player1Race]){
+		$("<option>").appendTo($("#spaceUnit")).attr("value", "player1 " + player1Race + " " + key).text("-" + units[player1Race][key].name)
+	}
+	$("<option>").appendTo($("#spaceUnit")).attr("value", "None").text("Player 2");
+	for (var key in units[player2Race]){
+		$("<option>").appendTo($("#spaceUnit")).attr("value", "player2 " + player2Race + " " + key).text("-" + units[player2Race][key].name)
+	}
+	$("<button>").appendTo($("#menu")).attr("id", "file").text("Save changes");
+	$("<button>").appendTo($("#menu")).attr("id", "stringify").text("Stringify");
+}
+
+$("#menu").on("click", "#stringify", function(e){
+	e.preventDefault();
+	$("#bucket").html(JSON.stringify(activeGame));
 })
 
+$("#bucket").on("click", ".gridSpace", function(){
+	setTargetElement($(this));
+	renderMenu();
+})
 
-var setActiveElement = function(element){
-	activeElement = element;
-	active = getXY(element);
-	x = active.x;
-	y = active.y;
-	activeSpace = activeGame.spaces[y][x];
-	activeUnit = activeSpace.contains
-	setMovable();
-	setTargetable();
-	activeElement.addClass("activeSpace");
-}
+$("#menu").on("click", "#file", function(e){
+	e.preventDefault();
+	targetSpace.terrain = terrain[$("#spaceTerrain").val()];
+	if ($("#spaceUnit").val() != "None"){
+		var selectedUnit = $("#spaceUnit").val();
+		selectedUnit = selectedUnit.split(" ");
+		var selectedPlayer = selectedUnit[0];
+		var selectedRace = selectedUnit[1];
+		var selectedPiece = selectedUnit[2];
+		targetSpace.contains = new Unit(units[selectedRace][selectedPiece]);
+		targetSpace.contains.player = selectedPlayer;
+	}
+	renderMap();
+})
 
 var setTargetElement = function(element){
 	targetElement =  element;
@@ -88,29 +119,6 @@ var getXY = function(element){
 
 var stripClass = function(classname){
 	$("." + classname).removeClass(classname)
-}
-
-var setMovable = function(){
-	stripClass("movable");
-	var movableSpaces = activeGame.movableSpaces(y, x);
-	movableSpaces.forEach(function(space){
-		$(".row" + space.y + ".col" + space.x).addClass("movable")
-	})
-}
-
-var setTargetable = function(){
-	stripClass("targetable");
-	var availableTargets = activeGame.availableTargets(y, x);
-	availableTargets.forEach(function(space){
-		$(".row" + space.y + ".col" + space.x).addClass("targetable")
-	})
-}
-
-var renderSpaces = function() {
-	activeElement.replaceWith(activeSpace.render());
-	targetElement.replaceWith(targetSpace.render());
-	stripClass("movable");
-	stripClass("targetable")
 }
 
 var renderMap = function(){
