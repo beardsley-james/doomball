@@ -19,6 +19,10 @@
 	border-color: gold;
 }
 
+.player2 {
+	transform:rotate(180deg);
+}
+
 .unit-human {
 	background-image: url('../images/background-human.png');
 }

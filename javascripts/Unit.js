@@ -37,7 +37,11 @@ Unit.prototype.render = function(){
 	}
 	outputHTML += "'>";
 	outputHTML += "<div class='unit-name'>" + this.name + "</div>";
-	outputHTML += "<img src='" + this.graphic + "' class='unit-graphic'>"
+	outputHTML += "<img src='" + this.graphic + "' class='unit-graphic"
+	if (this.player && this.player == "player2"){
+			outputHTML += " player2'"
+	}
+	outputHTML += "'>"
 	if (this.inactive) {
 		outputHTML += "<div class='inactive'></div>"
 	}
