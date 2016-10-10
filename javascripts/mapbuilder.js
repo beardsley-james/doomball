@@ -54,18 +54,38 @@ var renderMenu = function(){
 	$("<h3>").appendTo($("#menu")).text("Terrain");
 	$("<select>").appendTo($("#menu")).attr("id", "spaceTerrain");
 	for (var key in terrain){
-		$("<option>").appendTo($("#spaceTerrain")).attr("value", key).text(terrain[key].name)
+		$("<option>").appendTo($("#spaceTerrain")).attr("value", key).text(terrain[key].name).prop("selected", function(){if (terrain[key].name == targetSpace.terrain.name) return true})
 	}
 	$("<h3>").appendTo($("#menu")).text("Unit");
 	$("<select>").appendTo($("#menu")).attr("id", "spaceUnit");
 	$("<option>").appendTo($("#spaceUnit")).attr("value", "None").text("Empty space");
 	$("<option>").appendTo($("#spaceUnit")).attr("value", "None").text("Player 1");
 	for (var key in units[player1Race]){
-		$("<option>").appendTo($("#spaceUnit")).attr("value", "player1 " + player1Race + " " + key).text("-" + units[player1Race][key].name)
+		$("<option>").appendTo($("#spaceUnit")).attr("value", "player1 " + player1Race + " " + key).text("-" + units[player1Race][key].name).prop("selected",
+			function(){
+				if (targetSpace.contains){
+					var thisSpaceContains = targetSpace.contains.player + " " + targetSpace.contains.race + " " + targetSpace.contains.name.split(" ").join("").toLowerCase();
+					var elementUnitName = "player1 " + player1Race + " " + key;
+					if (thisSpaceContains == elementUnitName){
+						return true
+					}
+				}
+			}
+		)
 	}
 	$("<option>").appendTo($("#spaceUnit")).attr("value", "None").text("Player 2");
 	for (var key in units[player2Race]){
-		$("<option>").appendTo($("#spaceUnit")).attr("value", "player2 " + player2Race + " " + key).text("-" + units[player2Race][key].name)
+		$("<option>").appendTo($("#spaceUnit")).attr("value", "player2 " + player2Race + " " + key).text("-" + units[player2Race][key].name).prop("selected",
+			function(){
+				if (targetSpace.contains){
+					var thisSpaceContains = targetSpace.contains.player + " " + targetSpace.contains.race + " " + targetSpace.contains.name.split(" ").join("").toLowerCase();
+					var elementUnitName = "player2 " + player2Race + " " + key;
+					if (thisSpaceContains == elementUnitName){
+						return true
+					}
+				}
+			}
+		)
 	}
 	$("<button>").appendTo($("#menu")).attr("id", "file").text("Save changes");
 	$("<button>").appendTo($("#menu")).attr("id", "stringify").text("Stringify");
