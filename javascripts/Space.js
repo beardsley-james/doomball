@@ -11,7 +11,7 @@ var Space = function(x, y, terrain){
 }
 
 Space.prototype.render = function() {
-	var outputHTML = "<div class='gridSpace row" + this.y + " col" + this.x + " terrain-" + this.terrain.name.toLowerCase();
+	var outputHTML = "<div class='gridSpace row" + this.y + " col" + this.x + " terrain-" + this.terrain.name.split(" ").join("-").toLowerCase();
 	if (this.x % 2 != 0) {
 		outputHTML += " evenSpace";
 	}
