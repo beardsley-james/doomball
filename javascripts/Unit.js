@@ -23,12 +23,16 @@ var Unit = function(unit) {
 }
 
 Unit.prototype.attacks = function(target) {
+	if (this.attack.adjusted){
+		var attacks = this.attack.adjusted
+	} else {attacks = this.attack.value}
 	var success = false;
-	for (var i = 0; i < this.attack.value; i++) {
+	for (var i = 0; i < attacks; i++) {
 		if (coinFlip()) {
+			console.log("Attack " + i + " hits")
 			target.hits += 1;
 			success = true;
-		}
+		} else {console.log("Attack " + i + " misses")}
 	}
 	return success;
 }

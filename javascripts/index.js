@@ -39,21 +39,30 @@ $("#bucket").on("click", ".gridSpace", function(){
 			setActiveElement($(this));
 		} else if (targetElement.hasClass("targetable")){
 			if (activeUnit.attacks(targetUnit)){
+				var targetDefense = targetUnit.defense["value"];
+				if (targetUnit.defense.adjusted){
+					targetDefense = targetUnit.defense.adjusted
+				}
+				console.log("Target's defense is " + targetDefense);
+				console.log("Currently has " + targetUnit.hits + " hits")
 				if (activeUnit.special == "Pinning"){
-					targetUnit.pinned = true
+					targetUnit.pinned = true;
+					console.log("Target is pinned by the attack");
 				}
 				console.log("Hits!");
-				if (targetUnit.hits > targetUnit.defense.value) {
+				if (targetUnit.hits > targetDefense) {
 					delete targetSpace.contains
+					console.log("Target unit destroyed with " + targetUnit.hits + " hits versus " + targetDefense + " defense");
 					if (activeUnit.special == "Overrun") {
 						targetSpace.contains = activeSpace.contains;
 						delete activeSpace.contains;
 						targetSpace.contains.hasMoved = true;
 					}
-				} else if (targetUnit.hits == targetUnit.defense.value  && targetUnit.special != "Steadfast") {
+				} else if (targetUnit.hits == targetDefense  && targetUnit.special != "Steadfast") {
 					var retreatableSpaces = activeGame.retreatableSpaces(targetY, targetX);
 					if (retreatableSpaces.length == 0 || targetUnit.pinned) {
 						delete targetSpace.contains
+						console.log("Target unit destroyed with " + targetUnit.hits + " hits versus " + targetDefense + " defense due to no retreatable spaces");
 						if (activeUnit.special == "Overrun") {
 							targetSpace.contains = activeSpace.contains;
 							delete activeSpace.contains;
