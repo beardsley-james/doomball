@@ -38,43 +38,54 @@ $("#bucket").on("click", ".gridSpace", function(){
 			stripClass("activeSpace");
 			setActiveElement($(this));
 		} else if (targetElement.hasClass("targetable")){
-			activeUnit.attacks(targetUnit);
-			if (targetUnit.hits > targetUnit.defense.value) {
-				delete targetSpace.contains
-				if (activeUnit.special == "Overrun") {
-					targetSpace.contains = activeSpace.contains;
-					delete activeSpace.contains;
-					targetSpace.contains.hasMoved = true;
+			if (activeUnit.attacks(targetUnit)){
+				if (activeUnit.special == "Pinning"){
+					targetUnit.pinned = true
 				}
-			} else if (targetUnit.hits == targetUnit.defense.value  && targetUnit.special != "Steadfast") {
-				var retreatableSpaces = activeGame.retreatableSpaces(targetY, targetX);
-				if (retreatableSpaces.length == 0) {
+				console.log("Hits!");
+				if (targetUnit.hits > targetUnit.defense.value) {
 					delete targetSpace.contains
 					if (activeUnit.special == "Overrun") {
 						targetSpace.contains = activeSpace.contains;
 						delete activeSpace.contains;
 						targetSpace.contains.hasMoved = true;
 					}
-				} else {
-					var randomSpace = Math.floor(Math.random() * retreatableSpaces.length);
-					console.log(randomSpace);
-					var coords = retreatableSpaces[randomSpace];
-					console.log(coords);
-					activeGame.spaces[coords[0]][coords[1]].contains = targetSpace.contains;
-					console.log(targetSpace.contains);
-					delete targetSpace.contains;
-					if (activeUnit.special == "Overrun") {
-						targetSpace.contains = activeSpace.contains;
-						delete activeSpace.contains;
-						targetSpace.contains.hasMoved = true;
+				} else if (targetUnit.hits == targetUnit.defense.value  && targetUnit.special != "Steadfast") {
+					var retreatableSpaces = activeGame.retreatableSpaces(targetY, targetX);
+					if (retreatableSpaces.length == 0 || targetUnit.pinned) {
+						delete targetSpace.contains
+						if (activeUnit.special == "Overrun") {
+							targetSpace.contains = activeSpace.contains;
+							delete activeSpace.contains;
+							targetSpace.contains.hasMoved = true;
+						}
+					} else {
+						var randomSpace = Math.floor(Math.random() * retreatableSpaces.length);
+						console.log(randomSpace);
+						var coords = retreatableSpaces[randomSpace];
+						console.log(coords);
+						activeGame.spaces[coords[0]][coords[1]].contains = targetSpace.contains;
+						console.log(targetSpace.contains);
+						delete targetSpace.contains;
+						if (activeUnit.special == "Overrun") {
+							targetSpace.contains = activeSpace.contains;
+							delete activeSpace.contains;
+							targetSpace.contains.hasMoved = true;
+						}
 					}
 				}
-			}
+			} else {console.log("Miss!")}
 			activeUnit.inactivate();
 			renderMap();
 		}
 	} else if ($(".activeSpace".length > 1)) {
 		if (targetElement.hasClass("movable")){
+			if (activeUnit.defense.special){
+				activeUnit.adjustStat("defense", 1)
+			}
+			if (activeUnit.special == "Charging"){
+				activeUnit.adjustStat("attack", 1)
+			}
 			targetSpace.contains = activeSpace.contains;
 			delete activeSpace.contains;
 			targetSpace.contains.hasMoved = true;

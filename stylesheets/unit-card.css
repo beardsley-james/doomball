@@ -75,6 +75,14 @@
 	font-family: 'Carter One', serif;
 }
 
+.adjusted-stat {
+	text-shadow:
+		-1px -1px 0 #ffffff,  
+		1px -1px 0 #ffffff,
+		-1px 1px 0 #ffffff,
+		1px 1px 0 #ffffff;
+}
+
 .range-box {
 	background-color: orange;
 	top: 0px
@@ -104,7 +112,7 @@
 	right: 0px
 }
 
-.tokens {
+.token {
 	position: absolute;
 	top: 40px;
 	left: 0px

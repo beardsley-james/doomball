@@ -73,7 +73,7 @@ Map.prototype.movableSpaces = function(y, x){
 	var space = this.spaces[y][x];
 	if (space.contains){
 		var spacesInRange = [space];
-		if (space.contains.hasMoved) {
+		if (space.contains.hasMoved || space.contains.pinned) {
 			var range = 0;
 		} else {var range = space.contains.move.value;}
 		var showStoppers = [];
@@ -102,7 +102,6 @@ Map.prototype.retreatableSpaces = function (y, x){
 	var space = this.spaces[y][x];
 	var spaces = [];
 	var colType= "";
-	console.log(x % 2);
 	if (x % 2 == 0) {
 		colType = "even"
 	} else {colType = "odd"};
@@ -146,8 +145,11 @@ Map.prototype.switchActivePlayer = function(){
 				space.contains.hits = 0;
 				space.contains.hasMoved = false;
 				space.contains.notInactive();
+				delete space.contains.defense.adjusted;
 			} else if (space.contains) {
 				space.contains.inactive = true;
+				delete space.contains.pinned;
+				delete space.contains.attack.adjusted;
 			}
 		}, this)
 	}, this)

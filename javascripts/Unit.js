@@ -23,11 +23,14 @@ var Unit = function(unit) {
 }
 
 Unit.prototype.attacks = function(target) {
+	var success = false;
 	for (var i = 0; i < this.attack.value; i++) {
 		if (coinFlip()) {
-			target.hits += 1
+			target.hits += 1;
+			success = true;
 		}
 	}
+	return success;
 }
 
 Unit.prototype.render = function(){
@@ -53,11 +56,11 @@ Unit.prototype.render = function(){
 		outputHTML += "<div class='stat-box special-box'><img src='./images/" + this.special.toLowerCase() + ".png'></div>"
 	}
 	if (this.hits > 0) {
-		outputHTML += "<div class='tokens tokens-hits'><img src='./images/hits-" + this.hits + ".png'></div>"
+		outputHTML += "<div class='token tokens-hits'><img src='./images/hits-" + this.hits + ".png'></div>"
 	}
-	this.tokens.forEach(function(token) {
-		outputHTML += "<div class='tokens tokens-" + token + "'><img src='./images/token-" + token + ".png'></div>"
-	});
+	if (this.pinned) {
+		outputHTML += "<div class='token'><img src='./images/token-pinned.png'></div>"
+	};
 	outputHTML += "</div>"
 	return outputHTML
 }
@@ -74,8 +77,21 @@ Unit.prototype.notInactive = function(){
 	this.inactive = false;
 }
 
+Unit.prototype.adjustStat = function(stat, modifier){
+	if (this[stat].adjusted){
+		this[stat].adjusted += modifier
+	} else {
+		this[stat].adjusted = this[stat]["value"] + modifier
+	}
+}
+
 var createStatBox = function(stat, unit){
-	var outputHTML = "<div class='stat-box " + stat + "-box'>" + unit[stat]["value"];
+	var outputHTML = "<div class='stat-box " + stat + "-box";
+	if (unit[stat].adjusted){
+		outputHTML += " adjusted-stat'>" + unit[stat].adjusted
+	} else {
+		outputHTML += "'>" + unit[stat]["value"];
+	}
 	if (unit[stat]["special"]) {
 		outputHTML += "<span style='font-size: .5em'>*</span>"
 	}
