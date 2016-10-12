@@ -26,6 +26,11 @@ Unit.prototype.attacks = function(target) {
 	if (this.attack.adjusted){
 		var attacks = this.attack.adjusted
 	} else {attacks = this.attack.value}
+	if (this.special == "Piercing" && target.defense["value"] > 1){
+		attacks ++;
+		console.log("The attack pierces the target's armor!")
+	}
+	console.log("Active unit strikes with " + attacks + " attack value")
 	var success = false;
 	for (var i = 0; i < attacks; i++) {
 		if (coinFlip()) {

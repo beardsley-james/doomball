@@ -43,6 +43,10 @@ $("#bucket").on("click", ".gridSpace", function(){
 				if (targetUnit.defense.adjusted){
 					targetDefense = targetUnit.defense.adjusted
 				}
+				if (targetSpace.terrain.name == "Forests" && !activeSpace.isAdjacentTo(targetSpace)){
+					targetDefense ++;
+					console.log("The target is shielded by the forests")
+				}
 				console.log("Target's defense is " + targetDefense);
 				console.log("Currently has " + targetUnit.hits + " hits")
 				if (activeUnit.special == "Pinning"){

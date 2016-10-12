@@ -150,6 +150,9 @@ Map.prototype.switchActivePlayer = function(){
 				space.contains.inactive = true;
 				delete space.contains.pinned;
 				delete space.contains.attack.adjusted;
+				if (space.terrain.addsDefense){
+					space.contains.adjustStat("defense", 1)
+				}
 			}
 		}, this)
 	}, this)
@@ -180,22 +183,12 @@ var retreatModifiers = {
 		"odd": [[0, -1], [1, 0], [0, 1]]
 	}
 }
-
-var map = ["......",
-		   "--..--",
-		   ".-^--.",
-		   "=.##..",
-		   "..##.=",
-		   ".--^-.",
-		   "--..--",
-		   "......"]
 	
 var terrain = {
 	".": {"name": "Plains"},
 	"#": {"name": "Forests",
 		"dropsLOS": true,
-		"x2Movement": true,
-		"addsDefense": true},
+		"x2Movement": true},
 	"-": {"name": "Hills",
 		"addMeleeDefense": true,
 		"extendsLOS": true},
