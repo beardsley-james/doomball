@@ -30,6 +30,14 @@ Map.prototype.spacesInRangeOf = function(y, x){
 	if (space.contains){
 		var spacesInRange = [space];
 		var range = space.contains.range.value;
+		if (space.contains.hasMoved && space.contains.move.special){
+			range = 0;
+			console.log("Active unit cannot fire as it has moved")
+		}
+		if (space.contains.attack.special && !space.contains.loaded){
+			range = 0;
+			console.log("Active unit's weapon is not loaded")
+		}
 		var elevated = space.isElevated();
 		var showStoppers = [];
 		while (range > 0) {
@@ -98,26 +106,31 @@ Map.prototype.movableSpaces = function(y, x){
 	}
 }
 
-Map.prototype.retreatableSpaces = function (y, x){
-	var space = this.spaces[y][x];
+Map.prototype.retreat = function(y, x){
 	var spaces = [];
-	var colType= "";
-	if (x % 2 == 0) {
-		colType = "even"
-	} else {colType = "odd"};
-	var player = space.contains.player;
-	var modifiers = retreatModifiers[player][colType];
-	modifiers.forEach(function(modifier){
-		var tempY = (Number(y) + modifier[0]);
-		var tempX = (Number(x) + modifier[1]);
-		var candidate = this.spaces[tempY][tempX];
-		if (!(tempY < 0 || tempX < 0 || tempY > this.height - 1 || tempX > this.width -1 )) {
-			if (space.canMoveTo(candidate)) {
-				spaces.push([tempY, tempX])
-			}
+	var space = this.spaces[y][x];
+	var candidates = space.retreatableSpaces();
+	console.log(candidates);
+	var i = 0;
+	while (i < candidates.length){
+		var candidate = this.spaces[candidates[i][0]][candidates[i][1]];
+		if (space.canMoveTo(candidate) && i == 0){
+			return candidate
 		}
-	}, this)
-	return spaces
+		if (space.canMoveTo(candidate)){
+			spaces.push(candidate)
+		}
+		i++
+	}
+	if (spaces.length == 0){
+		return false
+	} else if (spaces.length == 1){
+		return spaces[0]
+	} else {
+		if (coinFlip()){
+			return spaces[1]
+		} else {return spaces[0]}
+	}
 }
 
 Map.prototype.adjacentSpaces = function(y, x){
@@ -133,6 +146,15 @@ Map.prototype.adjacentSpaces = function(y, x){
 	return returnArray
 }
 
+Map.prototype.leadership = function(y, x){
+	var adjacent = this.adjacentSpaces(y, x);
+	adjacent.forEach(function(space){
+		if (space.contains && space.contains.player == this.activePlayer){
+			space.contains.adjustStat("attack", 1)
+		}
+	}, this)
+}
+
 Map.prototype.switchActivePlayer = function(){
 	if (this.activePlayer == "player1") {
 		this.activePlayer = "player2"
@@ -144,8 +166,33 @@ Map.prototype.switchActivePlayer = function(){
 			if (space.contains && (space.contains.player == this.activePlayer)) {
 				space.contains.hits = 0;
 				space.contains.hasMoved = false;
-				space.contains.notInactive();
+				if (!space.contains.retreated){
+					space.contains.notInactive();
+				}
 				delete space.contains.defense.adjusted;
+				if (space.contains.special == "Leadership"){
+					this.leadership(space.y, space.x)
+				}
+				if (space.contains.special == "Cowardly") {
+					var friendlies = false;
+					var adjacent = this.adjacentSpaces(space.y, space.x);
+					adjacent.forEach(function(space){
+						if (space.contains && space.contains.player == this.activePlayer){
+							friendlies = true
+						}
+					}, this)
+					if (!friendlies){
+						var retreatSpace = this.retreat(space.y, space.x);
+						if (retreatSpace == false || space.contains.pinned) {
+							delete space.contains
+						} else {
+							space.contains.inactivate();
+							space.contains.retreated = true;
+							this.spaces[retreatSpace.y][retreatSpace.x].contains = space.contains;
+							delete space.contains;
+						}
+					}
+				}
 			} else if (space.contains) {
 				space.contains.inactive = true;
 				delete space.contains.pinned;
@@ -153,6 +200,7 @@ Map.prototype.switchActivePlayer = function(){
 				if (space.terrain.addsDefense){
 					space.contains.adjustStat("defense", 1)
 				}
+				delete space.contains.retreated;
 			}
 		}, this)
 	}, this)
@@ -173,7 +221,7 @@ Map.prototype.checkIfTurnComplete = function(){
 	return turnComplete;
 }
 
-var retreatModifiers = {
+/* var retreatModifiers = {
 	"player2": {
 		"even": [[0, -1], [-1, 0], [0, 1]],
 		"odd": [[-1, -1], [-1, 0], [-1, 1]]
@@ -182,7 +230,7 @@ var retreatModifiers = {
 		"even": [[1, -1], [1, 0], [1, 1]],
 		"odd": [[0, -1], [1, 0], [0, 1]]
 	}
-}
+} */
 	
 var terrain = {
 	".": {"name": "Plains"},

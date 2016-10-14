@@ -90,3 +90,28 @@ Space.prototype.isEntrenched = function() {
 		return true
 	}
 }
+
+var retreatModifiers = {
+	"player2": {
+		"even": [[-1, 0], [0, -1], [0, 1]],
+		"odd": [[-1, 0], [-1, -1], [-1, 1]]
+	},
+	"player1": {
+		"even": [[1, 0], [1, -1], [1, 1]],
+		"odd": [[1, 0], [0, -1], [0, 1]]
+	}
+}
+
+Space.prototype.retreatableSpaces = function(){
+	var spaces = [];
+	var colType = "";
+	var player = this.contains.player;
+	if (this.x % 2 == 0){
+		colType = "even"
+	} else {colType = "odd"};
+	var modifiers = retreatModifiers[player][colType];
+	modifiers.forEach(function(modifier){
+		spaces.push([Number(this.y) + modifier[0], Number(this.x) + modifier[1]])
+	}, this)
+	return spaces
+}

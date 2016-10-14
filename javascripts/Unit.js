@@ -25,7 +25,7 @@ var Unit = function(unit) {
 Unit.prototype.attacks = function(target) {
 	if (this.attack.adjusted){
 		var attacks = this.attack.adjusted
-	} else {attacks = this.attack.value}
+	} else {var attacks = this.attack.value}
 	if (this.special == "Piercing" && target.defense["value"] > 1){
 		attacks ++;
 		console.log("The attack pierces the target's armor!")
@@ -38,6 +38,12 @@ Unit.prototype.attacks = function(target) {
 			target.hits += 1;
 			success = true;
 		} else {console.log("Attack " + i + " misses")}
+	}
+	if (this.special == "Explosive"){
+		if (success == false){
+			success = true;
+			target.hits += 1
+		}
 	}
 	return success;
 }
@@ -70,16 +76,15 @@ Unit.prototype.render = function(){
 	if (this.pinned) {
 		outputHTML += "<div class='token'><img src='./images/token-pinned.png'></div>"
 	};
+	if (this.loaded) {
+		outputHTML += "<div class = 'token'><img src='./images/token-loaded.png'></div>"
+	}
 	outputHTML += "</div>"
 	return outputHTML
 }
 
 Unit.prototype.inactivate = function(){
 	this.inactive = true;
-	if (activeGame.checkIfTurnComplete()){
-		activeGame.switchActivePlayer();
-		renderMap();
-	}
 }
 
 Unit.prototype.notInactive = function(){

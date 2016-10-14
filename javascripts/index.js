@@ -28,6 +28,10 @@ $("#bucket").on("click", ".gridSpace", function(){
 	setTargetElement($(this));
 	if (targetUnit) {
 		if (targetElement.hasClass("activeSpace")){
+			if (activeUnit.attack.special && !activeUnit.loaded){
+				activeUnit.loaded = true;
+				console.log("Active unit reloads")
+			}
 			activeUnit.inactivate();
 			renderSpaces();
 			if (activeGame.checkIfTurnComplete()){
@@ -38,6 +42,9 @@ $("#bucket").on("click", ".gridSpace", function(){
 			stripClass("activeSpace");
 			setActiveElement($(this));
 		} else if (targetElement.hasClass("targetable")){
+			if (activeUnit.attack.special){
+				delete activeUnit.loaded
+			}
 			if (activeUnit.attacks(targetUnit)){
 				var targetDefense = targetUnit.defense["value"];
 				if (targetUnit.defense.adjusted){
@@ -63,8 +70,8 @@ $("#bucket").on("click", ".gridSpace", function(){
 						targetSpace.contains.hasMoved = true;
 					}
 				} else if (targetUnit.hits == targetDefense  && targetUnit.special != "Steadfast") {
-					var retreatableSpaces = activeGame.retreatableSpaces(targetY, targetX);
-					if (retreatableSpaces.length == 0 || targetUnit.pinned) {
+					var retreatSpace = activeGame.retreat(targetY, targetX);
+					if (retreatSpace == false || targetUnit.pinned) {
 						delete targetSpace.contains
 						console.log("Target unit destroyed with " + targetUnit.hits + " hits versus " + targetDefense + " defense due to no retreatable spaces");
 						if (activeUnit.special == "Overrun") {
@@ -73,12 +80,7 @@ $("#bucket").on("click", ".gridSpace", function(){
 							targetSpace.contains.hasMoved = true;
 						}
 					} else {
-						var randomSpace = Math.floor(Math.random() * retreatableSpaces.length);
-						console.log(randomSpace);
-						var coords = retreatableSpaces[randomSpace];
-						console.log(coords);
-						activeGame.spaces[coords[0]][coords[1]].contains = targetSpace.contains;
-						console.log(targetSpace.contains);
+						activeGame.spaces[retreatSpace.y][retreatSpace.x].contains = targetSpace.contains;
 						delete targetSpace.contains;
 						if (activeUnit.special == "Overrun") {
 							targetSpace.contains = activeSpace.contains;
@@ -89,6 +91,10 @@ $("#bucket").on("click", ".gridSpace", function(){
 				}
 			} else {console.log("Miss!")}
 			activeUnit.inactivate();
+			if (activeGame.checkIfTurnComplete()){
+				activeGame.switchActivePlayer();
+				renderMap();
+			}
 			renderMap();
 		}
 	} else if ($(".activeSpace".length > 1)) {
@@ -106,8 +112,6 @@ $("#bucket").on("click", ".gridSpace", function(){
 			setActiveElement($(".row" + targetY + ".col" + targetX));
 		}
 	}
-	
-	activeGame.checkIfTurnComplete();
 })
 
 
@@ -186,6 +190,9 @@ var mapConstructor = function(attacker, defender){
 		var y = unit[1];
 		var x = unit[2];
 		board.spaces[y][x].contains = new Unit(units[attacker][type]);
+		if (board.spaces[y][x].contains.attack.special){
+			board.spaces[y][x].contains.loaded = true
+		}
 		board.spaces[y][x].contains.player = "player1"
 	});
 	defArmy["army"].forEach(function(item){
@@ -193,8 +200,10 @@ var mapConstructor = function(attacker, defender){
 		var type = unit[0];
 		var y = unit[1];
 		var x = unit[2];
-		
 		board.spaces[y][x].contains = new Unit(units[defender][type]);
+		if (board.spaces[y][x].contains.attack.special){
+			board.spaces[y][x].contains.loaded = true
+		}
 		board.spaces[y][x].contains.player = "player2"
 	});
 	return board
