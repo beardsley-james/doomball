@@ -19,7 +19,8 @@ $("#submit").on("click", function(e){
 	$("#teamSelect").toggle();
 	var attacker = $('input[name=attacker]:checked').val();
 	var defender = $('input[name=defender]:checked').val();
-	activeGame = mapConstructor(attacker, defender);
+	var activeMap = pregenConstructor(attacker, defender);
+	activeGame = mapConstructor(activeMap);
 	activeGame.switchActivePlayer();
 	renderMap();
 })
@@ -179,7 +180,7 @@ var renderMap = function(){
 	$("#bucket").html(activeGame.render());
 }
 
-var mapConstructor = function(attacker, defender){
+/* var mapConstructor = function(attacker, defender){
 	var attArmy = armyList[attacker]["attacker"];
 	var defArmy = armyList[defender]["defender"];
 	var map = defArmy["map"].concat(attArmy.map);
@@ -207,4 +208,44 @@ var mapConstructor = function(attacker, defender){
 		board.spaces[y][x].contains.player = "player2"
 	});
 	return board
+} */
+
+var mapConstructor = function(map){
+	var board = new Map(map.board);
+	map["p1Army"].forEach(function(item){
+		var unit = item.split(" ");
+		var type = unit[0];
+		var y = unit[1];
+		var x = unit[2];
+		board.spaces[y][x].contains = new Unit(units[map.p1Race][type]);
+		if (board.spaces[y][x].contains.attack.special){
+			board.spaces[y][x].contains.loaded = true
+		}
+		board.spaces[y][x].contains.player = "player1"
+	});
+	map["p2Army"].forEach(function(item){
+		var unit = item.split(" ");
+		var type = unit[0];
+		var y = unit[1];
+		var x = unit[2];
+		board.spaces[y][x].contains = new Unit(units[map.p2Race][type]);
+		if (board.spaces[y][x].contains.attack.special){
+			board.spaces[y][x].contains.loaded = true
+		}
+		board.spaces[y][x].contains.player = "player2"
+	});
+	return board
 }
+
+var pregenConstructor = function(attacker, defender){
+	var map = {};
+	map.p1Race = attacker;
+	map.p2Race = defender;
+	map.p1Army = armyList[attacker]["attacker"]["army"];
+	map.p2Army = armyList[defender]["defender"]["army"];
+	map.board = armyList[attacker]["attacker"]["map"].concat(armyList[defender]["defender"]["map"]);
+	console.log(map);
+	return map
+}
+
+var testMap = {"board":["...","...","..."],"p1Army":["spearmen 2 0","spearmen 2 1","spearmen 2 2"],"p2Army":["fighters 0 0","fighters 0 1","fighters 0 2"],"p1Race":"human","p2Race":"orc"}
