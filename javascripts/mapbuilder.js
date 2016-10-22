@@ -93,7 +93,8 @@ var renderMenu = function(){
 
 $("#menu").on("click", "#stringify", function(e){
 	e.preventDefault();
-	$("#bucket").html(JSON.stringify(activeGame));
+	var mapObject = stringify(activeGame);
+	$("#bucket").html(JSON.stringify(mapObject));
 })
 
 $("#bucket").on("click", ".gridSpace", function(){
@@ -149,4 +150,32 @@ var capitalize = function(string){
 	string = string.split("");
 	string[0]= string[0].toUpperCase();
 	return string.join("")
+}
+
+var stringify = function(game){
+	var map = {};
+	map.board = [];
+	map.p1Army = [];
+	map.p2Army = [];
+	map.p1Race = player1Race;
+	map.p2Race = player2Race;
+	game.spaces.forEach(function(row){
+		var rowString = "";
+		row.forEach(function(space){
+			var terrainName = space.terrain.name;
+			for (var key in terrain){
+				if (terrain[key].name == terrainName){
+					rowString += key
+				}
+			}
+			if (space.contains){
+				var unitString = space.contains.name.split(" ").join("").toLowerCase() + " " + space.y + " " + space.x;
+				if (space.contains.player == "player1"){
+					map.p1Army.push(unitString)
+				} else {map.p2Army.push(unitString)}
+			}
+		})
+		map.board.push(rowString)
+	})
+	return map
 }
