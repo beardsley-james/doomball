@@ -113,12 +113,14 @@ Map.prototype.retreat = function(y, x){
 	console.log(candidates);
 	var i = 0;
 	while (i < candidates.length){
-		var candidate = this.spaces[candidates[i][0]][candidates[i][1]];
-		if (space.canMoveTo(candidate) && i == 0){
-			return candidate
-		}
-		if (space.canMoveTo(candidate)){
-			spaces.push(candidate)
+		if (candidates[i][0] >= 0 && candidates[i][0] < this.height && candidates[i][1] >= 0 && candidates[i][1] < this.width){
+			var candidate = this.spaces[candidates[i][0]][candidates[i][1]];
+			if (space.canMoveTo(candidate) && i == 0){
+				return candidate
+			}
+			if (space.canMoveTo(candidate)){
+				spaces.push(candidate)
+			}
 		}
 		i++
 	}
